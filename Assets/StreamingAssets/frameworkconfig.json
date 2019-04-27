@@ -1,0 +1,13 @@
+{
+  "initmanager": [
+    {
+      "managername": "CoreManager",
+      "managerId": 0
+    },
+    {
+      "managername": "UIManager",
+      "managerId": 1
+    }
+  ],
+  "stepofManagerId": 3000
+}
