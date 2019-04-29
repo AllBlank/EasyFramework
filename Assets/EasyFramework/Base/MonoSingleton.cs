@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace EasyFramework
 {
+    /// <summary>
+    /// Manager单例模板
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract  class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
 
@@ -20,7 +24,7 @@ namespace EasyFramework
                     {
                         if (instance == null)
                         {
-
+                            //FrameworkEntry是框架的入口文件，必须挂上FrameworkEntry才能启动框架
                             GameObject go = FindObjectOfType<FrameworkEntry>().gameObject;
                             instance = go.AddComponent<T>();
                         }
@@ -31,15 +35,16 @@ namespace EasyFramework
             }
         }
 
-        private Dictionary<ushort, EventNode> nodetree = new Dictionary<ushort, EventNode>();
-
         private EventController eventController;
 
 
-
+        /// <summary>
+        /// 初始化事件控制器
+        /// </summary>
+        /// <param name="managerId">Manager的ID</param>
         private void InitEventController(ushort managerId)
         {
-            eventController = new EventController(nodetree, managerId);
+            eventController = new EventController(managerId);
         }
 
         public EventController EventCtl
@@ -47,16 +52,6 @@ namespace EasyFramework
             get
             {
                 return eventController;
-            }
-        }
-
-
-
-        protected Dictionary<ushort, EventNode> NodeTree
-        {
-            get
-            {
-                return nodetree;
             }
         }
 

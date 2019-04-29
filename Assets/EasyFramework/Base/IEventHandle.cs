@@ -5,6 +5,6 @@ namespace EasyFramework
 {
     public interface IEventHandle
     {
-        void ProcessEvent();
+        void ProcessEvent(ushort id,params object[] objs);
     }
 }

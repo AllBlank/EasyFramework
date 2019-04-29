@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace EasyFramework
+﻿namespace EasyFramework
 {
+    /// <summary>
+    /// 事件链表
+    /// </summary>
     public class EventNode
     {
 

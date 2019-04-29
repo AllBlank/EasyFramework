@@ -1,22 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace EasyFramework
 {
     public class EventController
     {
+        /// <summary>
+        /// 事件树，所有的事件都将注册在这个字典中
+        /// </summary>
         private Dictionary<ushort, EventNode> nodetree;
+
+        /// <summary>
+        /// 当前所属Manager的id
+        /// </summary>
         private ushort managerId;
 
 
-        public EventController(Dictionary<ushort, EventNode> nodetree, ushort managerId)
+        public EventController(ushort managerId)
         {
-            this.nodetree = nodetree;
+            this.nodetree = new Dictionary<ushort, EventNode>();
             this.managerId = managerId;
         }
 
-        public void SendEvent(ushort id)
+        /// <summary>
+        /// 发送事件
+        /// </summary>
+        /// <param name="id">事件id</param>
+        /// <param name="objs">要发送的数据</param>
+        public void SendEvent(ushort id,params object[] objs)
         {
             if (GetManager(id) == managerId)
             {
@@ -28,7 +38,7 @@ namespace EasyFramework
                 EventNode tmpnode = nodetree[id];
                 while (tmpnode != null)
                 {
-                    tmpnode.Handle.ProcessEvent();
+                    tmpnode.Handle.ProcessEvent(id, objs);
                     tmpnode = tmpnode.next;
                 }
             }
@@ -38,6 +48,11 @@ namespace EasyFramework
             }
         }
 
+        /// <summary>
+        /// 注册事件
+        /// </summary>
+        /// <param name="id">事件id</param>
+        /// <param name="handle">处理事件的handle</param>
         public void RegisterEvent(ushort id, IEventHandle handle)
         {
             if(GetManager(id) != managerId)
@@ -60,7 +75,11 @@ namespace EasyFramework
             }
         }
 
-
+        /// <summary>
+        /// 解除事件注册
+        /// </summary>
+        /// <param name="id">事件id</param>
+        /// <param name="handle">处理事件的handle</param>
         public void UnregisterEvent(ushort id, IEventHandle handle)
         {
             if (!nodetree.ContainsKey(id))
@@ -90,6 +109,11 @@ namespace EasyFramework
             }
         }
 
+        /// <summary>
+        /// 通过id获取事件所属的Manager
+        /// </summary>
+        /// <param name="msgId">事件id</param>
+        /// <returns>事件所属的Manager</returns>
         public static ushort GetManager(ushort msgId)
         {
             int count = msgId / GlobalConfig.Instance.StepofManagerId;
