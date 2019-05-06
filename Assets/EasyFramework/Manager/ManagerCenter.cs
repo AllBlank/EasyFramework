@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
 namespace EasyFramework
 {
@@ -31,17 +29,21 @@ namespace EasyFramework
             }
         }
 
-        private Dictionary<string, ushort> managetdic;
+        private Dictionary<string, ushort> managerdic;
 
         private Dictionary<ushort, EventController> iddic;
 
 
         private ManagerCenter(Dictionary<string, ushort> managetdic)
         {
-            this.managetdic = managetdic;
+            this.managerdic = managetdic;
             iddic = new Dictionary<ushort, EventController>();
         }
 
+        /// <summary>
+        /// 通过id向对应Manager发送消息
+        /// </summary>
+        /// <param name="id">事件id</param>
         public void SendEvent(ushort id)
         {
             int rid = EventController.GetManager(id);
@@ -50,14 +52,18 @@ namespace EasyFramework
                 if(pair.Key == rid)
                 {
                     pair.Value.SendEvent(id);
+                    break;
                 }
             }
         }
 
-
+        /// <summary>
+        /// 初始化要挂载的Manager
+        /// </summary>
         public void InitManager()
         {
-            foreach(string name in managetdic.Keys)
+            //通过反射建立所有Manager对象，并调用Manager的初始化方法
+            foreach(string name in managerdic.Keys)
             {
 
                 Type t = Type.GetType("EasyFramework."+ name);
@@ -67,8 +73,8 @@ namespace EasyFramework
                 
 
                 object obj = baset.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance).GetValue(null,null);
-                baset.GetMethod("InitEventController", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, new object[] { managetdic[name] });
-                iddic.Add(managetdic[name], (EventController)(t.GetProperty("EventCtl").GetValue(obj)));
+                baset.GetMethod("InitEventController", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Invoke(obj, new object[] { managerdic[name] });
+                iddic.Add(managerdic[name], (EventController)(t.GetProperty("EventCtl").GetValue(obj)));
             }
             
         }

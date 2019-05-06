@@ -4,26 +4,15 @@ using UnityEngine;
 
 namespace EasyFramework
 {
+    /// <summary>
+    /// 进行框架需要的初始化操作
+    /// </summary>
     public class FrameworkEntry : MonoBehaviour
     {
-
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
             ManagerCenter.Instance.InitManager();
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                CoreManager.Instance.EventCtl.SendEvent(0);
-            }
-            else if (Input.GetKeyDown(KeyCode.Q))
-            {
-                CoreManager.Instance.EventCtl.RegisterEvent(0, new TestHandle());
-                Debug.Log("success");
-            }
         }
     }
 }

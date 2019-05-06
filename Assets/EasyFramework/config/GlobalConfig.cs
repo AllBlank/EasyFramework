@@ -21,11 +21,12 @@ namespace EasyFramework
                     {
                         if(instance == null)
                         {
-
+                            //读取json文件
                             Config config = JsonUtility.FromJson<Config>(File.ReadAllText(Application.streamingAssetsPath + "/frameworkconfig.json"));
                             instance = new GlobalConfig();
                             instance.stepofManagerId = config.stepofManagerId;
                             instance.managerdic = new Dictionary<string, ushort>();
+                            //将配置信息中要挂载的Manager存储在字典中
                             for (int i = 0; i < config.initmanager.Length; i++)
                             {
                                 instance.managerdic.Add(config.initmanager[i].managername, config.initmanager[i].managerId);

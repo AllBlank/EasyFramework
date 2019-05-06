@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace EasyFramework
+﻿namespace EasyFramework
 {
     public interface IEventHandle
     {

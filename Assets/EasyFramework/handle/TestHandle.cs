@@ -6,7 +6,8 @@ namespace EasyFramework
 {
     public class TestHandle : IEventHandle
     {
-        public void ProcessEvent()
+
+        public void ProcessEvent(ushort id, params object[] objs)
         {
             Debug.Log("hello framework");
         }
